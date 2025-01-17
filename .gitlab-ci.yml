@@ -1,0 +1,36 @@
+image: docker:latest
+
+services:
+- docker:dind
+
+variables:
+  EC2_USER: ubuntu
+  EC2_INSTANCE_IP: <IP_ADDRESS>
+
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  before_script:
+    - apk add --no-cache openssh-client rsync
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  script:
+    # Copy repository files
+    - rsync -avz --exclude='.git' ./ $EC2_USER@$EC2_INSTANCE_IP:~/greenamber/
+    
+    # Install Node.js and PM2 (if not already installed)
+    - ssh $EC2_USER@$EC2_INSTANCE_IP "command -v node || (curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - && sudo apt-get install -y nodejs)"
+    - ssh $EC2_USER@$EC2_INSTANCE_IP "command -v pm2 || sudo npm install pm2@latest -g"
+    
+    # Set up Python environment and install dependencies
+    - ssh $EC2_USER@$EC2_INSTANCE_IP "cd ~/greenamber && python3 -m venv venv"
+    - ssh $EC2_USER@$EC2_INSTANCE_IP "cd ~/greenamber && source venv/bin/activate && pip install -r requirements.txt"
+    
+    # Start or restart the application using PM2 with the specified command
+    - ssh $EC2_USER@$EC2_INSTANCE_IP "cd ~/greenamber && source venv/bin/activate && pm2 delete greenamber-ai || true"
+    - ssh $EC2_USER@$EC2_INSTANCE_IP "cd ~/greenamber && source venv/bin/activate && pm2 start \"gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app\" --name greenamber-ai --watch"

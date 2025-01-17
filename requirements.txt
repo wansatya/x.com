@@ -1,0 +1,11 @@
+fastapi
+openai
+google-generativeai
+instructor
+firebase-admin
+python-multipart
+opencv-python
+uvicorn 
+gunicorn 
+pillow
+python-dotenv
