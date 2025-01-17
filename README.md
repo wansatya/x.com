@@ -15,8 +15,8 @@ Welcome to the GreenAmber.org repository! This is the official backup and public
 
 <p>
 
-<img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/Green-Amber-Sustainable/greenamber" /> 
-<img alt="" src="https://img.shields.io/github/repo-size/Green-Amber-Sustainable/greenamber" /> <img alt="GitHub Issues" src="https://img.shields.io/github/issues/Green-Amber-Sustainable/greenamber" /> <img alt="Github License" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+<img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/wansatya/x.com" /> 
+<img alt="" src="https://img.shields.io/github/repo-size/wansatya/x.com" /> <img alt="GitHub Issues" src="https://img.shields.io/github/issues/wansatya/x.com" /> <img alt="Github License" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
 </p>
 
 </div>
